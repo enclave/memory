@@ -1,7 +1,7 @@
 Module {
 	name: 'internal'
-	description: ''
-	version: ''
-	license: ''
+	description: 'Internal process memory manipulation'
+	version: '1.0'
+	license: 'MIT'
 	dependencies: []
 }

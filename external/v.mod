@@ -1,7 +1,7 @@
 Module {
 	name: 'external'
-	description: ''
-	version: ''
-	license: ''
+	description: 'External process memory manipulation'
+	version: '1.0'
+	license: 'MIT'
 	dependencies: []
 }

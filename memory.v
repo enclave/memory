@@ -1,5 +1,4 @@
-module main
+module memory
 
-fn main() {
-	println('Hello World!')
-}
+import external
+import internal
