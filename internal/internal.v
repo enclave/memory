@@ -16,9 +16,7 @@ pub fn write<T>(address voidptr, data T) bool {
 
 	// Change page protection to enable execute, read-only or read/write access
 	if C.VirtualProtect(address, sizeof(T), C.PAGE_EXECUTE_READWRITE, &old_protection) == 0 {
-		$if debug {
-			panic('write() failed')
-		}
+		eprintln('write() failed')
 		return false
 	}
 
@@ -27,9 +25,7 @@ pub fn write<T>(address voidptr, data T) bool {
 	}
 	// Restore page protection
 	if C.VirtualProtect(address, sizeof(T), old_protection, &old_protection) == 0 {
-		$if debug {
-			panic('write() failed #2')
-		}
+		eprintln('write() failed #2')
 		return false
 	}
 	return true

@@ -54,7 +54,7 @@ fn find_process_id(name string) u32 {
 	th32 := C.CreateToolhelp32Snapshot(C.TH32CS_SNAPPROCESS, 0)
 
 	if th32 == C.INVALID_HANDLE_VALUE {
-		panic('CreateToolhelp32Snapshot() failed')
+		eprintln('CreateToolhelp32Snapshot() failed')
 	}
 
 	pe32 := C.PROCESSENTRY32W{
@@ -75,15 +75,11 @@ fn find_process_id(name string) u32 {
 			}
 		}
 	} else {
-		$if debug {
-			panic('Process32FirstW() failed')
-		}
+		eprintln('Process32FirstW() failed')
 		return 0
 	}
 
-	$if debug {
-		panic('$name is not running')
-	}
+	eprintln('$name is not running')
 	return 0
 }
 
@@ -92,15 +88,11 @@ fn open_process(id u32) voidptr {
 	handle := C.OpenProcess(C.PROCESS_ALL_ACCESS, 0, id)
 
 	if handle == 0 {
-		$if debug {
-			panic('OpenProcess() failed')
-		}
+		eprintln('OpenProcess() failed')
 		return voidptr(0)
 	}
 
-	$if debug {
-		println('OpenProcess() successful')
-	}
+	println('OpenProcess() successful')
 	return handle
 }
 

@@ -21,9 +21,8 @@ pub fn read<T>(address voidptr) T {
 	unsafe { C.ReadProcessMemory(g_external.handle, address, &data, sizeof(T), &bytes_read) }
 
 	if sizeof(T) != bytes_read {
-		$if debug {
-			panic('read() failed')
-		}
+		eprintln('read() failed')
+		exit(1)
 	}
 	return data
 }
@@ -38,9 +37,7 @@ pub fn write<T>(address voidptr, data T) bool {
 	if sizeof(T) == bytes_written {
 		return true
 	} else {
-		$if debug {
-			panic('write() failed')
-		}
+		eprintln('write() failed')
 		return false
 	}
 }
