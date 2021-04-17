@@ -22,7 +22,6 @@ pub fn read<T>(address voidptr) T {
 
 	if sizeof(T) != bytes_read {
 		eprintln('read() failed')
-		exit(1)
 	}
 	return data
 }
