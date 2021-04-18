@@ -91,7 +91,7 @@ pub fn find_process_id(name string) u32 {
 }
 
 // Obtain an open handle to a process
-pub fn open_process(id u32) voidptr {
+pub fn open_process_handle(id u32) voidptr {
 	handle := C.OpenProcess(C.PROCESS_ALL_ACCESS, 0, id)
 
 	if handle == 0 {
@@ -107,6 +107,6 @@ pub fn attach_process(name string) {
 	id := find_process_id(name)
 
 	g_process = Process{
-		handle: open_process(id)
+		handle: open_process_handle(id)
 	}
 }
