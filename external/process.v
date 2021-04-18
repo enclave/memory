@@ -49,7 +49,7 @@ fn C.Process32FirstW(hSnapshot voidptr, lppe voidptr) int
 fn C.Process32NextW(hSnapshot voidptr, lppe voidptr) int
 
 // Find a running process by its name
-fn find_process_id(name string) u32 {
+pub fn find_process_id(name string) u32 {
 	// Take a snapshot of all processes, and obtain an open handle to the snapshot
 	th32 := C.CreateToolhelp32Snapshot(C.TH32CS_SNAPPROCESS, 0)
 
@@ -84,7 +84,7 @@ fn find_process_id(name string) u32 {
 }
 
 // Obtain an open handle to a process
-fn open_process(id u32) voidptr {
+pub fn open_process(id u32) voidptr {
 	handle := C.OpenProcess(C.PROCESS_ALL_ACCESS, 0, id)
 
 	if handle == 0 {
