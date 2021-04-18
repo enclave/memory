@@ -48,14 +48,21 @@ fn C.OpenProcess(dwDesiredAccess u32, bInheritHandle int, dwProcessId u32) voidp
 fn C.Process32FirstW(hSnapshot voidptr, lppe voidptr) int
 fn C.Process32NextW(hSnapshot voidptr, lppe voidptr) int
 
-// Find a running process by its name
-pub fn find_process_id(name string) u32 {
+// Take a snapshot of all processes in the system
+pub fn get_process_list() voidptr {
 	// Take a snapshot of all processes, and obtain an open handle to the snapshot
 	th32 := C.CreateToolhelp32Snapshot(C.TH32CS_SNAPPROCESS, 0)
 
 	if th32 == C.INVALID_HANDLE_VALUE {
 		eprintln('CreateToolhelp32Snapshot() failed')
 	}
+
+	return th32
+}
+
+// Find a running process by its name
+pub fn find_process_id(name string) u32 {
+	th32 := get_process_list()
 
 	pe32 := C.PROCESSENTRY32W{
 		dwSize: size_t(sizeof(C.PROCESSENTRY32W))
