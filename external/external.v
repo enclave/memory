@@ -1,42 +1,35 @@
 module external
 
-__global ( g_external External )
-
 [windows_stdcall]
-fn C.ReadProcessMemory(hProcess voidptr, lpBaseAddress voidptr, lpBuffer voidptr, nSize size_t, lpNumberOfBytesRead voidptr) int
-fn C.VirtualProtectEx(hProcess voidptr, lpAddress voidptr, dwSize size_t, flNewProtect u32, lpflOldProtect voidptr) int
-fn C.WriteProcessMemory(hProcess voidptr, lpBaseAddress voidptr, lpBuffer voidptr, nSize size_t, lpNumberOfBytesRead voidptr) int
-
-pub struct External {
-pub:
-	handle voidptr
-}
+fn C.ReadProcessMemory(hProcess voidptr, lpBaseAddress voidptr, lpBuffer voidptr, nSize size_t, lpNumberOfBytesRead &size_t) int
+fn C.WriteProcessMemory(hProcess voidptr, lpBaseAddress voidptr, lpBuffer voidptr, nSize size_t, lpNumberOfBytesWritten &size_t) int
 
 // Reads data from a specified address
 [unsafe]
-pub fn read<T>(address voidptr) T {
+pub fn (p Process) read<T>(address voidptr) T {
 	mut data := T{}
-	mut bytes_read := u32(0)
+	mut bytes_read := size_t(0)
 
-	unsafe { C.ReadProcessMemory(g_external.handle, address, &data, sizeof(T), &bytes_read) }
+	unsafe { C.ReadProcessMemory(p.handle, address, &data, sizeof(T), &bytes_read) }
 
-	if sizeof(T) != bytes_read {
-		eprintln('read() failed')
+	if size_t(sizeof(T)) != bytes_read {
+		eprintln('ReadProcessMemory() failed')
 	}
+
 	return data
 }
 
 // Writes data to a specified address
 [unsafe]
-pub fn write<T>(address voidptr, data T) bool {
-	mut bytes_written := u32(0)
+pub fn (p Process) write<T>(address voidptr, data T) bool {
+	mut bytes_written := size_t(0)
 
-	unsafe { C.WriteProcessMemory(g_external.handle, address, &data, sizeof(T), &bytes_written) }
+	unsafe { C.WriteProcessMemory(p.handle, address, &data, sizeof(T), &bytes_written) }
 
-	if sizeof(T) == bytes_written {
-		return true
-	} else {
-		eprintln('write() failed')
+	if size_t(sizeof(T)) != bytes_written {
+		eprintln('WriteProcessMemory() failed')
 		return false
 	}
+
+	return true
 }

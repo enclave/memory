@@ -1,7 +1,7 @@
 module internal
 
 [windows_stdcall]
-fn C.VirtualProtect(lpAddress voidptr, dwSize size_t, flNewProtect u32, lpflOldProtect voidptr) int
+fn C.VirtualProtect(lpAddress voidptr, dwSize size_t, flNewProtect u32, lpflOldProtect &u32) int
 
 // Reads data from a specified address
 [unsafe]
@@ -16,7 +16,7 @@ pub fn write<T>(address voidptr, data T) bool {
 
 	// Change page protection to enable execute, read-only or read/write access
 	if C.VirtualProtect(address, sizeof(T), C.PAGE_EXECUTE_READWRITE, &old_protection) == 0 {
-		eprintln('write() failed')
+		eprintln('VirtualProtect() failed')
 		return false
 	}
 
@@ -25,8 +25,9 @@ pub fn write<T>(address voidptr, data T) bool {
 	}
 	// Restore page protection
 	if C.VirtualProtect(address, sizeof(T), old_protection, &old_protection) == 0 {
-		eprintln('write() failed #2')
+		eprintln('VirtualProtect() failed #2')
 		return false
 	}
+
 	return true
 }

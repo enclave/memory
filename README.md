@@ -20,17 +20,15 @@ import memory.external
 
 // Obtain an open handle to a process
 fn obtain_process() {
-	external.attach_process('placeholder.exe')
-	g_external = external.External{
-		handle: g_process.handle
-	}
+	mut process := external.Process{}
+	process.attach_process('placeholder.exe')
 }
 
 // Demonstrate external memory manipulation of a process
-fn read_and_write() {
+fn (p Process) read_and_write() {
 	str := 'Hey'
-	unsafe { external.write<string>(&str, 'Bye') }
-	read_str := unsafe { external.read<string>(&str) }
+	unsafe { p.write<string>(&str, 'Bye') }
+	read_str := unsafe { p.read<string>(&str) }
 	// [Output] str: Bye, read_str: Bye
 	println('str: $str, read_str: $read_str')
 }
