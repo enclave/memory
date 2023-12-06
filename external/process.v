@@ -61,7 +61,7 @@ pub fn (mut p Process) find_process_id(name string) u32 {
 			// Check if enumerated process name matches the specified process name
 			if process_name == name {
 				println('$name found')
-				// Destroy the snapshot as it not needed anymore
+				// Destroy the snapshot as it is not needed anymore
 				C.CloseHandle(process_snapshot)
 			}
 		}
